@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "41123572714",
+    "firebase_url": "https://ureblockingme.firebaseio.com",
+    "project_id": "ureblockingme",
+    "storage_bucket": "ureblockingme.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41123572714:android:f548459eb1247274",
+        "android_client_info": {
+          "package_name": "apuri.com.br.ureblockingme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41123572714-ji08cfuoap3qdb02h1qar1sbdqt4co1a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlYXGEKEwUlBt4tdsyUM8iohFmCp55bMY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
