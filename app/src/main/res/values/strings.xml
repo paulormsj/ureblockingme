@@ -1,11 +1,21 @@
 <resources>
     <string name="app_name">UREBlockingMe</string>
     <string name="action_settings">Settings</string>
-    <string name="hint_license_plate">Placa do carro que está te bloqueando</string>
+    <string name="hint_blocking_license_plate">Placa do carro que está te bloqueando</string>
     <string name="txt_bt_warn">Avisar</string>
     <string name="txt_ure_blocking_me">Você está me travando</string>
     <string name="txt_on_my_way">Estou Indo</string>
     <string name="txt_send_message">Enviar Mensagem</string>
     <string name="hint_message">Mensagem</string>
     <string name="txt_remove_you_car">"Oi %1$s pode vir tirar seu carro?"</string>
+    <string name="title_activity_wellcome">WellcomeActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="txt_wellcome">Bem vindo(a)!</string>
+    <string name="txt_lets_begin">Vamos iniciar o processo de configuração do aplicativo.</string>
+    <string name="txt_signup">Registro</string>
+    <string name="txt_name_and_license_plate">Informe seu nome e a placa do seu carro</string>
+    <string name="hint_user_name">Nome</string>
+    <string name="hint_license_plate">ABC-1234</string>
+    <string name="txt_continue">Continue</string>
+    <string name="txt_configuring">Configurando</string>
 </resources>

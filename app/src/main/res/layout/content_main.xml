@@ -18,7 +18,7 @@
         android:id="@+id/txtLicensePlate"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:hint="@string/hint_license_plate"/>
+        android:hint="@string/hint_blocking_license_plate"/>
 
     <android.support.v7.widget.AppCompatButton
         android:layout_width="wrap_content"
