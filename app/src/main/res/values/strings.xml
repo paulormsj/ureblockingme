@@ -18,4 +18,6 @@
     <string name="hint_license_plate">ABC-1234</string>
     <string name="txt_continue">Continue</string>
     <string name="txt_configuring">Configurando</string>
+    <string name="hint_email_address">fulano@fpc.ufba.br</string>
+    <string name="hint_password">Senha</string>
 </resources>

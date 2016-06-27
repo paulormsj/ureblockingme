@@ -23,8 +23,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupWarnButton();
-        if(this.getIntent().getAction().equals(ACTION_NOTIFICATION))
-            showBlockingMePopup(getIntent().getExtras().getString(BlockingNotificationExtras.EXTRA_CAR_OWNER));
+
 
         //TODO check for google play services
     }

@@ -1,7 +1,5 @@
 package apuri.com.br.ureblockingme;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -16,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.TextView;
+import apuri.com.br.ureblockingme.fragments.UserLoginFragment;
 
 public class WellcomeActivity extends AppCompatActivity {
 
@@ -106,10 +104,9 @@ public class WellcomeActivity extends AppCompatActivity {
             switch(getArguments().getInt(ARG_SECTION_NUMBER)){
                 case 0: layout = R.layout.fragment_wellcome;
                     break;
-                case 1: layout = R.layout.fragment_user_registration;
+                case 1: layout = R.layout.fragment_user_login;
                     break;
-                case 2: layout = R.layout.fragment_setting_up;
-                    break;
+
             }
             View rootView = inflater.inflate(layout, container, false);
             return rootView;
@@ -128,7 +125,10 @@ public class WellcomeActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position);
+            if(position == 0)
+                return PlaceholderFragment.newInstance(position);
+            else
+                return new UserLoginFragment();
         }
 
         @Override
@@ -144,8 +144,6 @@ public class WellcomeActivity extends AppCompatActivity {
                     return "SECTION 1";
                 case 1:
                     return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
             }
             return null;
         }
