@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import apuri.com.br.ureblockingme.MainActivity;
@@ -32,6 +33,7 @@ public class UserLoginFragment extends Fragment {
     private TextView txtPassword;
     private Button btContinue;
     private TextView txtEmail;
+    private TextView txtLicensePlate;
 
     @Nullable
     @Override
@@ -40,6 +42,7 @@ public class UserLoginFragment extends Fragment {
         txtUserName = (TextView)view.findViewById(R.id.txtUserName);
         txtPassword = (TextView)view.findViewById(R.id.txtPassword);
         txtEmail = (TextView)view.findViewById(R.id.txtEmail);
+        txtLicensePlate = (TextView)view.findViewById(R.id.txtLicensePlate);
         btContinue = (Button)view.findViewById(R.id.btContinue);
         setupListeners();
         return view;
@@ -49,15 +52,9 @@ public class UserLoginFragment extends Fragment {
 
         TextWatcher watcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
             public void afterTextChanged(Editable editable) {
                 enableContinueIfItIsAllOk();
@@ -66,13 +63,17 @@ public class UserLoginFragment extends Fragment {
         txtUserName.addTextChangedListener(watcher);
         txtEmail.addTextChangedListener(watcher);
         txtPassword.addTextChangedListener(watcher);
+        txtLicensePlate.addTextChangedListener(watcher);
         btContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Resources res = getResources();
                 final ProgressDialog dialog = ProgressDialog.show(UserLoginFragment.this.getContext(),res.getString(R.string.txt_configuring),"",true,false);
-                UserManager.getInstance().registerUser(txtUserName.getEditableText().toString(),
-                        txtEmail.getEditableText().toString(), txtPassword.getEditableText().toString()
+
+                User user = new User(txtUserName.getEditableText().toString(),
+                        txtEmail.getEditableText().toString());
+                user.setLicensePlates(Arrays.asList(txtLicensePlate.getText().toString()));
+                UserManager.getInstance().registerUser(user, txtPassword.getEditableText().toString()
                         , new UserManager.IUserManagerCallback() {
                             @Override
                             public void onRegisterUser(boolean success, User user) {
@@ -98,7 +99,7 @@ public class UserLoginFragment extends Fragment {
     private void enableContinueIfItIsAllOk() {
         Pattern matcher = Pattern.compile("[a-zA-Z]{3}-[0-9]{4}");
         if(txtUserName.length() > 0 && txtPassword.length() > 0 &&
-                txtEmail.length() > 0)
+                txtEmail.length() > 0 && matcher.matcher(txtLicensePlate.getText()).matches())
             btContinue.setEnabled(true);
         else
             btContinue.setEnabled(false);

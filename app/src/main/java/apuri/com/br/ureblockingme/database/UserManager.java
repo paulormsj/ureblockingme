@@ -2,7 +2,6 @@ package apuri.com.br.ureblockingme.database;
 
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.v4.content.SharedPreferencesCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,7 +17,6 @@ import java.util.List;
 
 import apuri.com.br.ureblockingme.UreBlockingMeApplication;
 import apuri.com.br.ureblockingme.entities.User;
-import apuri.com.br.ureblockingme.messaging.InstanceIdService;
 
 /**
  * Created by paulo.junior on 26/06/2016.
@@ -28,6 +26,7 @@ public class UserManager {
 
     public static final String USER_DATA = "user_data";
     public static final String HAS_USER = "has_user";
+    public static final String USERS_DATABASE = "users";
     private FirebaseAuth auth;
     private boolean hasUser = false;
     private User user;
@@ -38,6 +37,7 @@ public class UserManager {
     private UserManager(){
         auth = FirebaseAuth.getInstance();
         auth.addAuthStateListener(new AuthListener());
+        this.observers = new ArrayList<>();
     }
 
     public static UserManager getInstance() {
@@ -47,25 +47,31 @@ public class UserManager {
         return instance;
     }
 
-    public void registerUser(final String name, final String email, final String password, final IUserManagerCallback callback){
+    public void registerUser(final User user, String password, final IUserManagerCallback callback){
         //TODO search if user exists
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password).
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(),password).
                 addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        User user = null;
+
                         if(task.isSuccessful()) {
-                            user = new User(name,email);
-                            FirebaseUser authUser = task.getResult().getUser();
-                            UserProfileChangeRequest update = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(name).build();
-                            authUser.updateProfile(update);
-                            setHasUser(true);
+                            createUserProfile(task.getResult(),user);
+                            user.setUid(task.getResult().getUser().getUid());
+                            setUser(user);
+                            notifyUserLogged(user);
                         }
                         if(callback != null)
                             callback.onRegisterUser(task.isSuccessful(),user);
                     }
                 });
+    }
+
+    private void createUserProfile(AuthResult authUser, User user) {
+        UserProfileChangeRequest update = new UserProfileChangeRequest.Builder()
+                .setDisplayName(user.getName()).build();
+        authUser.getUser().updateProfile(update);
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("users");
+        database.child(authUser.getUser().getUid()).setValue(user);
     }
 
     private void setHasUser(boolean has) {
@@ -78,14 +84,14 @@ public class UserManager {
         return hasUser;
     }
 
-    private void setUser(FirebaseAuth firebaseAuth) {
-        if(firebaseAuth != null ){
-            user = new User(firebaseAuth.getCurrentUser().getDisplayName(),
-                    firebaseAuth.getCurrentUser().getEmail(),firebaseAuth.getCurrentUser().getUid());
-        }else{
-            user = null;
-        }
+    private void setUser(User user) {
+        this.user = user;
+    }
 
+    public void updateUserToken(String token){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(USERS_DATABASE);
+        myRef.child(user.getUid()).child("token").setValue(token);
     }
 
     public void addObserver(IUserManagerObserver observer) {
@@ -122,7 +128,6 @@ public class UserManager {
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
             if(firebaseAuth.getCurrentUser() != null) {
                 setHasUser(true);
-                setUser(firebaseAuth);
             }
             else {
                 setHasUser(false);

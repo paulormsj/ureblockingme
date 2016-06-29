@@ -29,10 +29,8 @@ public class InstanceIdService extends FirebaseInstanceIdService implements User
     }
 
     private void sendRegistrationToServer(User user, String refreshedToken) {
-        if (currentToken != null && user != null) {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("users_info");
-            myRef.child(user.getUid()).child("token").setValue(currentToken);
+        if (refreshedToken != null && user != null) {
+            UserManager.getInstance().updateUserToken(refreshedToken);
         }
     }
 
@@ -44,6 +42,5 @@ public class InstanceIdService extends FirebaseInstanceIdService implements User
 
     @Override
     public void userLeft(User user) {
-        sendRegistrationToServer(user,"");
     }
 }
